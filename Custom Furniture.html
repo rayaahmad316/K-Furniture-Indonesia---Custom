@@ -197,14 +197,19 @@
         }
 
         .request-color-box {
-            grid-column: span 1;
-            background: white;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .request-color-box input {
+            width: 100%;
+            padding: 12px 12px;
             border: 1px solid #ccc;
-            border-radius: 10px;
-            height: 60px;
-            padding: 10px;
-            font-size: 0.7rem;
-            color: #999;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: #fff;
+            color: #333;
         }
 
         .color-circle:hover {
@@ -434,9 +439,15 @@
                             <div class="color-circle" data-color="Slate Gray Blue" style="background: #8e9a9b;"></div>
                             Slate Gray Blue
                         </div>
-                        <div class="request-color-box">
-                            <span style="color:red">*</span>Request Warna Lain<br>
-                            Nama Warna/Kode Warna/Kombinasi
+                        <div class="color-option custom-color-option">
+                            <div class="color-circle" data-color="Custom"
+                                style="background: #fff; border: 2px dashed #ccc; display: grid; place-items: center;">
+                                <i class="material-icons" style="font-size: 16px; color: #777;">edit</i>
+                            </div>
+                            <div class="request-color-box">
+                                <input id="customColorInput" name="customColor" type="text"
+                                    placeholder="Request Warna Lain / Kode Warna / Kombinasi">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -513,12 +524,51 @@
 
         // Color Picker Interaction
         const circles = document.querySelectorAll('.color-circle');
+        const customColorInput = document.getElementById('customColorInput');
+        const customColorOption = document.querySelector('.custom-color-option');
+
+        function setActiveColor(selectedCircle) {
+            circles.forEach(c => c.classList.remove('active'));
+            selectedCircle.classList.add('active');
+
+            if (selectedCircle.dataset.color === 'Custom' && customColorInput) {
+                customColorInput.focus();
+            }
+        }
+
         circles.forEach(circle => {
             circle.addEventListener('click', function () {
-                circles.forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
+                setActiveColor(this);
             });
         });
+
+        if (customColorOption) {
+            customColorOption.addEventListener('click', function (event) {
+                if (event.target === customColorInput) return;
+                const customCircle = this.querySelector('.color-circle[data-color="Custom"]');
+                if (customCircle) {
+                    setActiveColor(customCircle);
+                }
+            });
+        }
+
+        if (customColorInput) {
+            customColorInput.addEventListener('focus', function () {
+                const customCircle = document.querySelector('.color-circle[data-color="Custom"]');
+                if (customCircle) {
+                    setActiveColor(customCircle);
+                }
+            });
+            customColorInput.addEventListener('input', function () {
+                if (this.value.trim()) {
+                    const customCircle = document.querySelector('.color-circle[data-color="Custom"]');
+                    if (customCircle) {
+                        setActiveColor(customCircle);
+                    }
+                }
+            });
+        }
+
         if (!document.querySelector('.color-circle.active') && circles[0]) {
             circles[0].classList.add('active');
         }
@@ -526,7 +576,12 @@
         // Form Submit and localStorage save
         function getSelectedColor() {
             const active = document.querySelector('.color-circle.active');
-            return active ? active.dataset.color : 'Custom';
+            if (!active) return 'Custom';
+            if (active.dataset.color === 'Custom') {
+                const customValue = customColorInput ? customColorInput.value.trim() : '';
+                return customValue || 'Custom';
+            }
+            return active.dataset.color;
         }
 
         function formatPrice(value) {
@@ -546,13 +601,21 @@
             const address = document.getElementById('customerAddress').value.trim();
             const description = document.getElementById('description').value.trim();
             const quantity = Math.max(1, parseInt(document.getElementById('quantity').value, 10));
+            const customColorValue = customColorInput ? customColorInput.value.trim() : '';
             const color = getSelectedColor();
+            const activeCircle = document.querySelector('.color-circle.active');
+            const isCustomSelected = activeCircle && activeCircle.dataset.color === 'Custom';
             const fileInput = document.getElementById('productImage');
             const basePrice = 600000;
             const totalPrice = basePrice * quantity;
 
             if (!name || !address || !description) {
                 alert('Mohon lengkapi semua informasi pesan terlebih dahulu.');
+                return;
+            }
+
+            if (isCustomSelected && !customColorValue) {
+                alert('Mohon isi request warna lain atau pilih warna dari opsi yang tersedia.');
                 return;
             }
 
