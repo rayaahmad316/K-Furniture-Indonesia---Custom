@@ -443,9 +443,15 @@
                             <div class="circle" data-color="Charcoal Ebony" style="background:#333333"></div> Charcoal
                             Ebony
                         </div>
-                        <div class="request-color-box">
-                            <span style="color:red">*</span>Request Warna Lain<br>
-                            Nama Warna/Kode Warna/Kombinasi
+                        <div class="color-item custom-color-item">
+                            <div class="circle" data-color="Custom"
+                                style="background:#fff; border:2px dashed #ccc; display:grid; place-items:center;">
+                                <i class="material-icons" style="font-size:16px; color:#777">edit</i>
+                            </div>
+                            <div class="request-color-box">
+                                <input id="customColorInputEdit" name="customColor" type="text"
+                                    placeholder="Request Warna Lain / Kode Warna / Kombinasi">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -562,17 +568,48 @@
                 imgLabel.innerHTML = `<span style="background:#888; color:white; padding:2px 10px; border-radius:3px; margin-right:10px">Choose File</span> ${order.image && order.image.length ? 'Gambar tersimpan' : 'Tidak ada file dipilih'}`;
 
                 const circles = document.querySelectorAll('.circle');
+                const customColorInputEdit = document.getElementById('customColorInputEdit');
+                const customCircle = document.querySelector('.circle[data-color="Custom"]');
+
+                let matched = false;
                 circles.forEach(circle => {
-                    if (circle.dataset.color === order.color) {
-                        circle.classList.add('active');
-                    }
                     circle.style.cursor = 'pointer';
                     circle.style.border = '2px solid transparent';
                     circle.addEventListener('click', function () {
                         circles.forEach(c => c.classList.remove('active'));
                         this.classList.add('active');
+                        if (this.dataset.color === 'Custom' && customColorInputEdit) customColorInputEdit.focus();
                     });
+
+                    if (circle.dataset.color === order.color) {
+                        circle.classList.add('active');
+                        matched = true;
+                    }
                 });
+
+                if (!matched && customColorInputEdit && order.color) {
+                    // order.color is custom (not in predefined list)
+                    customColorInputEdit.value = order.color;
+                    if (customCircle) {
+                        circles.forEach(c => c.classList.remove('active'));
+                        customCircle.classList.add('active');
+                    }
+                }
+
+                if (customColorInputEdit) {
+                    customColorInputEdit.addEventListener('focus', function () {
+                        if (customCircle) {
+                            circles.forEach(c => c.classList.remove('active'));
+                            customCircle.classList.add('active');
+                        }
+                    });
+                    customColorInputEdit.addEventListener('input', function () {
+                        if (this.value.trim() && customCircle) {
+                            circles.forEach(c => c.classList.remove('active'));
+                            customCircle.classList.add('active');
+                        }
+                    });
+                }
 
                 document.getElementById('imgInput').addEventListener('change', function () {
                     const fileName = this.files.length ? this.files[0].name : 'Tidak ada file dipilih';
@@ -581,13 +618,18 @@
 
                 document.getElementById('editOrderForm').addEventListener('submit', function (e) {
                     e.preventDefault();
+                    const selectedCircleColor = document.querySelector('.circle.active')?.dataset.color || order.color;
+                    const finalColor = (selectedCircleColor === 'Custom')
+                        ? (customColorInputEdit && customColorInputEdit.value.trim() ? customColorInputEdit.value.trim() : order.color)
+                        : selectedCircleColor;
+
                     const updatedOrder = {
                         ...order,
                         customer: document.getElementById('customerName').value.trim(),
                         address: document.getElementById('customerAddress').value.trim(),
                         description: document.getElementById('description').value.trim(),
                         quantity: Math.max(1, parseInt(document.getElementById('quantity').value, 10)),
-                        color: document.querySelector('.circle.active')?.dataset.color || order.color,
+                        color: finalColor,
                         status: order.status || 'Konfirmasi'
                     };
 
