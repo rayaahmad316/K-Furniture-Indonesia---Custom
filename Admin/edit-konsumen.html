@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Data Konsumen - ADM Furniture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-header: #cbdce6;
+            --sidebar-bg: #2c3e50;
+            --topbar-bg: #f8f9fa;
+            --accent-blue: #3498db;
+            --btn-edit: #548ca8;
+            --btn-batal: #cbdce6;
+            --input-border: #999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            z-index: 1001;
+            transition: 0.3s ease;
+        }
+
+        .sidebar-logo {
+            background-color: var(--sidebar-header);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #000;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .sidebar-logo span {
+            font-weight: 300;
+            margin-left: 5px;
+        }
+
+        .admin-profile {
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logout-section {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- TOPBAR --- */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            height: 60px;
+            background: var(--topbar-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+        }
+
+        .v-divider {
+            width: 1px;
+            height: 35px;
+            background: #ccc;
+            margin-right: 20px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .badge-notif {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-blue);
+            color: white;
+            font-size: 10px;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 40px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* --- FORM EDIT DATA --- */
+        .form-card {
+            background: #f1f1f1;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        .form-title {
+            background: #e9ecef;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .form-body {
+            padding: 40px 50px;
+            background: #f9f9f9;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            width: 220px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fff;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            padding-left: 220px;
+        }
+
+        .btn {
+            padding: 10px 35px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: 0.3s;
+            color: white;
+        }
+
+        .btn-save {
+            background: var(--btn-edit);
+        }
+
+        .btn-cancel {
+            background: var(--btn-batal);
+            color: #000;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .topbar {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .form-group label {
+                width: 100%;
+            }
+
+            .button-group {
+                padding-left: 0;
+                justify-content: center;
+            }
+        }
+
+        /* Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.6s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <h2>ADM<span>Furniture</span></h2>
+        </div>
+        <div class="admin-profile"><i class="fas fa-user-circle fa-2x"></i><span>Admin 1</span></div>
+        <div class="menu-label">MENU ADMIN</div>
+        <nav>
+            <a href="Admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="konsumen.html" class="nav-link active"><i class="fas fa-users"></i> Konsumen</a>
+            <a href="katalog-produk.html" class="nav-link"><i class="fas fa-book"></i> Katalog Produk</a>
+            <a href="order-custom.html" class="nav-link"><i class="fas fa-edit"></i> Order Custom</a>
+        </nav>
+        <div class="logout-section">
+            <a href="index.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+    </aside>
+
+    <nav class="topbar">
+        <div class="topbar-left"><i class="fas fa-bars" id="hamburger" style="cursor:pointer; font-size: 20px;"></i>
+        </div>
+        <div class="topbar-right">
+            <div class="v-divider"></div>
+            <div class="cart-box">
+                <div style="position:relative;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge-notif">0</span>
+                </div>
+                <span style="font-size: 14px; margin-left: 10px;">Pesanan Masuk</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header fade-in" id="header">
+            <h1>EDIT DATA KONSUMEN</h1>
+            <p>Control Panel</p>
+        </header>
+        <section class="form-card fade-in" id="formSection">
+            <div class="form-title">Edit Konsumen</div>
+            <div class="form-body">
+                <form id="consumerForm">
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="namaLengkap" placeholder="Edit Nama Lengkap">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="Edit Email">
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor Telepon</label>
+                        <input type="text" id="nomorTelepon" placeholder="Edit Nomor">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="username" placeholder="Edit Username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Edit Password">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-save" id="btnEdit">Edit</button>
+                        <button type="button" class="btn btn-cancel" onclick="window.history.back()">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        hamburger.addEventListener('click', () => sidebar.classList.toggle('active'));
+
+        function getKonsumenData() {
+            const saved = JSON.parse(localStorage.getItem('konsumenData'));
+            return Array.isArray(saved) ? saved : [
+                {
+                    nama: 'achmdlhrryyalirkhs',
+                    email: 'achmdl@gmail.com',
+                    telepon: '098654335667533',
+                    username: 'ahmmddry',
+                    password: 'XXXXSJNFNANXX'
+                }
+            ];
+        }
+
+        function saveKonsumenData(data) {
+            localStorage.setItem('konsumenData', JSON.stringify(data));
+        }
+
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        function loadForm() {
+            const index = Number(getQueryParam('id'));
+            const data = getKonsumenData();
+
+            if (Number.isNaN(index) || index < 0 || index >= data.length) {
+                alert('Data konsumen tidak ditemukan.');
+                window.location.href = 'konsumen.html';
+                return;
+            }
+
+            const item = data[index];
+            document.getElementById('namaLengkap').value = item.nama;
+            document.getElementById('email').value = item.email;
+            document.getElementById('nomorTelepon').value = item.telepon;
+            document.getElementById('username').value = item.username;
+            document.getElementById('password').value = item.password;
+
+            document.getElementById('btnEdit').addEventListener('click', () => {
+                data[index] = {
+                    nama: document.getElementById('namaLengkap').value,
+                    email: document.getElementById('email').value,
+                    telepon: document.getElementById('nomorTelepon').value,
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                };
+                saveKonsumenData(data);
+                alert('Data konsumen berhasil diperbarui.');
+                window.location.href = 'konsumen.html';
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in').forEach(el => el.classList.add('show'));
+            loadForm();
+        });
+    </script>
+</body>
+
+</html>

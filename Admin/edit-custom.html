@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order Custom - ADM Furniture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-header: #cbdce6;
+            --sidebar-bg: #2c3e50;
+            --topbar-bg: #f8f9fa;
+            --accent-blue: #3498db;
+            --btn-edit: #548ca8;
+            --btn-batal: #cbdce6;
+            --input-border: #999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            z-index: 1001;
+            transition: 0.3s;
+        }
+
+        .sidebar-logo {
+            background-color: var(--sidebar-header);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #000;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .sidebar-logo span {
+            font-weight: 300;
+            margin-left: 5px;
+        }
+
+        .admin-profile {
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logout-section {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- TOPBAR --- */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            height: 60px;
+            background: var(--topbar-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .divider {
+            width: 1px;
+            height: 35px;
+            background: #ccc;
+            margin-right: 20px;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .badge-notif {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-blue);
+            color: white;
+            font-size: 10px;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 40px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* --- FORM EDIT DATA --- */
+        .form-card {
+            background: #f1f1f1;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        .form-title {
+            background: #e9ecef;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .form-body {
+            padding: 30px 50px;
+            background: #f9f9f9;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            width: 200px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .status-options {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .status-options div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .status-options input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            padding-left: 200px;
+        }
+
+        .btn {
+            padding: 10px 30px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: 0.3s;
+            color: white;
+        }
+
+        .btn-save {
+            background: var(--btn-edit);
+        }
+
+        .btn-cancel {
+            background: var(--btn-batal);
+            color: #000;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .topbar {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .form-group label {
+                width: 100%;
+            }
+
+            .button-group {
+                padding-left: 0;
+            }
+        }
+
+        /* Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.6s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <h2>ADM<span>Furniture</span></h2>
+        </div>
+        <div class="admin-profile"><i class="fas fa-user-circle fa-2x"></i><span>Admin 1</span></div>
+        <div class="menu-label">MENU ADMIN</div>
+        <nav>
+            <a href="Admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="konsumen.html" class="nav-link"><i class="fas fa-users"></i> Konsumen</a>
+            <a href="katalog-produk.html" class="nav-link"><i class="fas fa-book"></i> Katalog Produk</a>
+            <a href="order-custom.html" class="nav-link active"><i class="fas fa-edit"></i> Order Custom</a>
+        </nav>
+        <div class="logout-section">
+            <a href="index.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+    </aside>
+
+    <nav class="topbar">
+        <div class="topbar-left"><i class="fas fa-bars" id="hamburger" style="cursor:pointer; font-size: 20px;"></i>
+        </div>
+        <div class="topbar-right">
+            <div class="divider"></div>
+            <div class="cart-box">
+                <div style="position:relative;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge-notif">0</span>
+                </div>
+                <span style="font-size: 14px; margin-left: 10px;">Pesanan Masuk</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header fade-in">
+            <h1>EDIT DATA ORDER CUSTOM FURNITURE</h1>
+            <p>Control Panel</p>
+        </header>
+        <section class="form-card fade-in">
+            <div class="form-title">Edit Data Daftar Order Custom Furniture</div>
+            <div class="form-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label>Nama Konsumen</label>
+                        <input type="text" id="nama" placeholder="Nama Produk Furniture">
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat</label>
+                        <input type="text" id="alamat" placeholder="Deskripsi Furniture">
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea id="deskripsi" placeholder="Jenis Produk Furniture"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Warna</label>
+                        <input type="text" id="warna" placeholder="Bahan Furniture">
+                    </div>
+                    <div class="form-group">
+                        <label>Ukuran</label>
+                        <input type="text" id="ukuran" placeholder="Warna Furniture">
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah</label>
+                        <input type="text" id="jumlah" placeholder="Jumlah Pcs">
+                    </div>
+                    <div class="form-group">
+                        <label>Harga</label>
+                        <input type="text" id="harga" placeholder="Ukuran Furniture">
+                    </div>
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" id="gambar" accept="image/*">
+                        <img id="imagePreview" src="" alt="Preview"
+                            style="max-width: 100px; max-height: 100px; display: none; margin-top: 10px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <div class="status-options">
+                            <div><input type="radio" name="status" value="Konfirmasi" checked> Konfirmasi</div>
+                            <div><input type="radio" name="status" value="Proses"> Proses</div>
+                            <div><input type="radio" name="status" value="Pengiriman"> Pengiriman</div>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="btn btn-save" onclick="simpanData()">Edit</button>
+                        <button type="button" class="btn btn-cancel"
+                            onclick="window.location.href='order-custom.html'">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let imageBase64 = '';
+
+        // Hamburger Menu
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        hamburger.addEventListener('click', () => sidebar.classList.toggle('active'));
+
+        // Scroll Animation
+        let orders = [];
+        let currentOrderIndex = -1;
+        let currentOrder = null;
+
+        function getQueryParam(name) {
+            return new URLSearchParams(window.location.search).get(name);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in').forEach(el => el.classList.add('show'));
+
+            orders = JSON.parse(localStorage.getItem('customOrders') || '[]');
+            currentOrderIndex = parseInt(getQueryParam('orderIndex'), 10);
+
+            if (Number.isNaN(currentOrderIndex) || currentOrderIndex < 0 || currentOrderIndex >= orders.length) {
+                alert('Pesanan tidak ditemukan.');
+                return;
+            }
+
+            currentOrder = orders[currentOrderIndex];
+            document.getElementById('nama').value = currentOrder.customer || '';
+            document.getElementById('alamat').value = currentOrder.address || '';
+            document.getElementById('deskripsi').value = currentOrder.description || '';
+            document.getElementById('warna').value = currentOrder.color || '';
+            document.getElementById('ukuran').value = currentOrder.size || '';
+            document.getElementById('jumlah').value = currentOrder.quantity || '';
+            document.getElementById('harga').value = currentOrder.price || '';
+            imageBase64 = currentOrder.image || '';
+            if (imageBase64) {
+                document.getElementById('imagePreview').src = imageBase64;
+                document.getElementById('imagePreview').style.display = 'block';
+            }
+            if (currentOrder.status) {
+                const statusInput = document.querySelector(`input[name="status"][value="${currentOrder.status}"]`);
+                if (statusInput) {
+                    statusInput.checked = true;
+                }
+            }
+
+            const imgInput = document.getElementById('gambar');
+            imgInput.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imageBase64 = e.target.result;
+                        document.getElementById('imagePreview').src = imageBase64;
+                        document.getElementById('imagePreview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        function getSelectedColor() {
+            const active = document.querySelector('.circle.active');
+            return active ? active.dataset.color : currentOrder?.color || '';
+        }
+
+        function simpanData() {
+            if (!currentOrder || currentOrderIndex < 0) {
+                alert('Pesanan tidak valid.');
+                return;
+            }
+
+            const updatedOrder = {
+                ...currentOrder,
+                customer: document.getElementById('nama').value.trim(),
+                address: document.getElementById('alamat').value.trim(),
+                description: document.getElementById('deskripsi').value.trim(),
+                color: getSelectedColor(),
+                size: document.getElementById('ukuran').value.trim(),
+                quantity: parseInt(document.getElementById('jumlah').value, 10) || 1,
+                price: document.getElementById('harga').value.trim(),
+                image: imageBase64 || currentOrder.image || '',
+                status: document.querySelector('input[name="status"]:checked').value || currentOrder.status || 'Konfirmasi'
+            };
+
+            orders[currentOrderIndex] = updatedOrder;
+            localStorage.setItem('customOrders', JSON.stringify(orders));
+
+            alert('Data berhasil diperbarui!');
+            window.location.href = 'order-custom.html';
+        }
+    </script>
+</body>
+
+</html>

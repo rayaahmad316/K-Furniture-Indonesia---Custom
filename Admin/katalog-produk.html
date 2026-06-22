@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Produk - ADM Furniture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-header-bg: #cbdce6;
+            --sidebar-menu-bg: #2d3e50;
+            --topbar-bg: #f8f9fa;
+            --accent-blue: #3498db;
+            --btn-edit: #548ca8;
+            --btn-hapus: #2d3e50;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f1f4f8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-menu-bg);
+            height: 100vh;
+            position: fixed;
+            z-index: 1001;
+            transition: 0.3s ease;
+        }
+
+        .sidebar-logo {
+            background-color: var(--sidebar-header-bg);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #000;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .sidebar-logo span {
+            font-weight: 300;
+            margin-left: 6px;
+        }
+
+        .admin-profile {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .menu-label {
+            padding: 14px 20px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .logout-section {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            height: 60px;
+            background: var(--topbar-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            transition: 0.3s ease;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .v-divider {
+            width: 1px;
+            height: 32px;
+            background: #ccc;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        .icon-wrap {
+            position: relative;
+        }
+
+        .badge-blue {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-blue);
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 36px;
+            width: 100%;
+            transition: 0.3s ease;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .page-header p {
+            color: #7a7e88;
+            font-size: 14px;
+            margin-top: 6px;
+            margin-bottom: 28px;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            border-radius: 12px;
+            background: #3d5a80;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.3s ease;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .table-title {
+            background: #f6f8fb;
+            padding: 18px 24px;
+            font-weight: 700;
+            font-size: 15px;
+            color: #222;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 960px;
+        }
+
+        th,
+        td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #edf1f7;
+            font-size: 14px;
+            color: #434a59;
+        }
+
+        th {
+            background: #fafbfe;
+            text-align: left;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .img-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .btn-edit {
+            background: var(--btn-edit);
+        }
+
+        .btn-hapus {
+            background: var(--btn-hapus);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            opacity: 0.95;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.8s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .topbar {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .main-content {
+                padding: 18px;
+            }
+
+            table {
+                min-width: unset;
+            }
+
+            th,
+            td {
+                padding: 12px;
+                font-size: 12px;
+            }
+
+            .table-title {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <h2>ADM<span>Furniture</span></h2>
+        </div>
+        <div class="admin-profile">
+            <i class="fas fa-user-circle fa-2x"></i>
+            <span>Admin 1</span>
+        </div>
+        <div class="menu-label">MENU ADMIN</div>
+        <nav>
+            <a href="Admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="konsumen.html" class="nav-link"><i class="fas fa-users"></i> Konsumen</a>
+            <a href="katalog-produk.html" class="nav-link active"><i class="fas fa-book"></i> Katalog Produk</a>
+            <a href="order-custom.html" class="nav-link"><i class="fas fa-edit"></i> Order Custom</a>
+        </nav>
+        <div class="logout-section">
+            <a href="index.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+    </aside>
+
+    <nav class="topbar">
+        <div class="topbar-left">
+            <i class="fas fa-bars" id="btn-hamburger" style="cursor:pointer; font-size: 20px; color: #444;"></i>
+        </div>
+        <div class="topbar-right">
+            <div class="v-divider"></div>
+            <div class="cart-box">
+                <div class="icon-wrap">
+                    <i class="fas fa-shopping-cart" style="color: #444;"></i>
+                    <span class="badge-blue">0</span>
+                </div>
+                <span style="font-size: 14px; color: #444;">Pesanan Masuk</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header fade-in">
+            <h1>KATALOG PRODUK</h1>
+            <p>Control Panel</p>
+        </header>
+
+        <div class="top-actions fade-in">
+            <button class="btn-add" id="btnAddProduct"><i class="fas fa-plus"></i> Tambah Katalog Produk</button>
+        </div>
+
+        <section class="table-card fade-in">
+            <div class="table-title">Daftar Katalog Produk</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Produk</th>
+                            <th>Deskripsi</th>
+                            <th>Jenis Produk</th>
+                            <th>Bahan</th>
+                            <th>Warna</th>
+                            <th>Ukuran</th>
+                            <th>Gambar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="katalogTable"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const defaultData = [
+            {
+                nama: 'Scandi Lounge Chair',
+                deskripsi: 'Kursi ini memadukan estetika minimalis Skandinavia dengan kenyamanan ergonomis yang tinggi.',
+                jenis: 'Kursi Kantor Minimalis',
+                bahan: 'Kain Tenun | Busa',
+                warna: 'Taupe / Coklat Muda',
+                ukuran: 'Tinggi 53 Cm',
+                gambar: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=100'
+            }
+        ];
+
+        function getKatalogData() {
+            const saved = JSON.parse(localStorage.getItem('katalogData'));
+            if (Array.isArray(saved)) {
+                return saved;
+            }
+            saveKatalogData(defaultData);
+            return defaultData;
+        }
+
+        function saveKatalogData(data) {
+            localStorage.setItem('katalogData', JSON.stringify(data));
+        }
+
+        function renderKatalogTable() {
+            const tableBody = document.getElementById('katalogTable');
+            const data = getKatalogData();
+            tableBody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.nama}</td>
+                    <td>${item.deskripsi || '-'}</td>
+                    <td>${item.jenis || '-'}</td>
+                    <td>${item.bahan}</td>
+                    <td>${item.warna}</td>
+                    <td>${item.ukuran}</td>
+                    <td><img src="${item.gambar}" class="img-thumb" alt="${item.nama}"></td>
+                    <td>
+                        <button class="btn-action btn-edit" onclick="editKatalog(${index})"><i class="fas fa-edit"></i> EDIT</button>
+                        <button class="btn-action btn-hapus" onclick="hapusKatalog(${index})"><i class="fas fa-trash"></i> HAPUS</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function editKatalog(index) {
+            window.location.href = `edit-katalog.html?id=${index}`;
+        }
+
+        function hapusKatalog(index) {
+            if (!confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
+                return;
+            }
+            const data = getKatalogData();
+            data.splice(index, 1);
+            saveKatalogData(data);
+            renderKatalogTable();
+        }
+
+        const btnHamburger = document.getElementById('btn-hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const btnAddProduct = document.getElementById('btnAddProduct');
+
+        btnHamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        btnAddProduct.addEventListener('click', () => {
+            window.location.href = 'tambah-katalog.html';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (window.innerWidth <= 900 && !sidebar.contains(event.target) && !btnHamburger.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in').forEach((el) => el.classList.add('show'));
+            renderKatalogTable();
+        });
+    </script>
+</body>
+
+</html>

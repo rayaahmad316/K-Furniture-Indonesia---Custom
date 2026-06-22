@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konsumen - ADM Furniture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-header-bg: #cbdce6;
+            --sidebar-menu-bg: #2d3e50;
+            --topbar-bg: #f8f9fa;
+            --accent-blue: #3498db;
+            --btn-edit: #548ca8;
+            --btn-hapus: #2d3e50;
+            --text-dark: #000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-menu-bg);
+            height: 100vh;
+            position: fixed;
+            z-index: 1001;
+            transition: 0.3s ease;
+        }
+
+        .sidebar-logo {
+            background-color: var(--sidebar-header-bg);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #000;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .sidebar-logo span {
+            font-weight: 300;
+            margin-left: 5px;
+        }
+
+        .admin-profile {
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logout-section {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- TOPBAR --- */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            height: 60px;
+            background: var(--topbar-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .v-divider {
+            width: 1px;
+            height: 35px;
+            background: #ccc;
+            margin-right: 20px;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .icon-wrap {
+            position: relative;
+        }
+
+        .badge-blue {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-blue);
+            color: white;
+            font-size: 10px;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+
+        /* --- CONTENT --- */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 40px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* TABLE STYLING */
+        .table-card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-title {
+            background: #e9ecef;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            font-size: 13px;
+            color: #444;
+            text-align: center;
+        }
+
+        /* BUTTONS */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            margin: 2px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background: var(--btn-edit);
+        }
+
+        .btn-hapus {
+            background: var(--btn-hapus);
+        }
+
+        .btn-action:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        /* --- ANIMATION & RESPONSIVE --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.8s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .topbar {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            td,
+            th {
+                padding: 10px 5px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <h2>ADM<span>Furniture</span></h2>
+        </div>
+        <div class="admin-profile">
+            <i class="fas fa-user-circle fa-2x"></i>
+            <span>Admin 1</span>
+        </div>
+        <div class="menu-label">MENU ADMIN</div>
+        <nav>
+            <a href="Admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="konsumen.html" class="nav-link active"><i class="fas fa-users"></i> Konsumen</a>
+            <a href="katalog-produk.html" class="nav-link"><i class="fas fa-book"></i> Katalog Produk</a>
+            <a href="order-custom.html" class="nav-link"><i class="fas fa-edit"></i> Order Custom</a>
+        </nav>
+        <div class="logout-section">
+            <a href="index.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+    </aside>
+
+    <nav class="topbar">
+        <div class="topbar-left">
+            <i class="fas fa-bars" id="btn-hamburger" style="cursor:pointer; font-size: 20px; color: #555;"></i>
+        </div>
+        <div class="topbar-right">
+            <div class="v-divider"></div>
+            <div class="cart-box">
+                <div class="icon-wrap">
+                    <i class="fas fa-shopping-cart" style="color: #555;"></i>
+                    <span class="badge-blue">0</span>
+                </div>
+                <span style="font-size: 14px; color: #555; margin-left: 5px;">Pesanan Masuk</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header fade-in">
+            <h1>KONSUMEN</h1>
+            <p>Control Panel</p>
+        </header>
+
+        <section class="table-card fade-in">
+            <div class="table-title">Daftar Konsumen Furniture</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="50">NO</th>
+                            <th>Nama Lengkap</th>
+                            <th>Email</th>
+                            <th>Nomor Telepon</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="konsumenTable"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const defaultData = [
+            {
+                nama: 'Achmad Lhr Ryyal',
+                email: 'achmad@gmail.com',
+                telepon: '081234567890',
+                username: 'achmadlhr',
+                password: 'abc12345'
+            },
+            {
+                nama: 'Budi Santoso',
+                email: 'budi.santoso@gmail.com',
+                telepon: '081234567891',
+                username: 'budi_s',
+                password: 'budi2024'
+            },
+            {
+                nama: 'Siti Aminah',
+                email: 'siti.am@gmail.com',
+                telepon: '081987654321',
+                username: 'siti_aminah',
+                password: 'siti1234'
+            },
+            {
+                nama: 'Andi Wijaya',
+                email: 'andi.wijaya@gmail.com',
+                telepon: '082112233445',
+                username: 'andiwijaya',
+                password: 'andi2024'
+            },
+            {
+                nama: 'Rina Puspa',
+                email: 'rina.puspa@gmail.com',
+                telepon: '082299988776',
+                username: 'rinapuspa',
+                password: 'rina2024'
+            },
+            {
+                nama: 'Joko Prasetyo',
+                email: 'joko.prasetyo@gmail.com',
+                telepon: '081556677889',
+                username: 'jokopras',
+                password: 'joko1234'
+            },
+            {
+                nama: 'Maya Lestari',
+                email: 'maya.lestari@gmail.com',
+                telepon: '082334455667',
+                username: 'mayalestari',
+                password: 'maya5678'
+            },
+            {
+                nama: 'Dedi Nugroho',
+                email: 'dedi.nugroho@gmail.com',
+                telepon: '081667788990',
+                username: 'dedi_n',
+                password: 'dedi2024'
+            },
+            {
+                nama: 'Tina Marlina',
+                email: 'tina.marlina@gmail.com',
+                telepon: '082776655443',
+                username: 'tinam',
+                password: 'tina1234'
+            },
+            {
+                nama: 'Ahmad Rahman',
+                email: 'ahmad.rahman@gmail.com',
+                telepon: '081223344556',
+                username: 'ahmadrahman',
+                password: 'rahman789'
+            }
+        ];
+
+        function getKonsumenData() {
+            const rawData = localStorage.getItem('konsumenData');
+            if (!rawData) {
+                saveKonsumenData(defaultData);
+                return defaultData;
+            }
+
+            try {
+                const saved = JSON.parse(rawData);
+                if (!Array.isArray(saved) || saved.length === 0) {
+                    saveKonsumenData(defaultData);
+                    return defaultData;
+                }
+                return saved;
+            } catch (error) {
+                console.warn('Invalid konsumenData in localStorage, resetting to default.', error);
+                saveKonsumenData(defaultData);
+                return defaultData;
+            }
+        }
+
+        function saveKonsumenData(data) {
+            localStorage.setItem('konsumenData', JSON.stringify(data));
+        }
+
+        function renderKonsumenTable() {
+            const tableBody = document.getElementById('konsumenTable');
+            const data = getKonsumenData();
+            tableBody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.email}</td>
+                    <td>${item.telepon}</td>
+                    <td>${item.username}</td>
+                    <td>${item.password}</td>
+                    <td>
+                        <button class="btn-action btn-edit" onclick="editKonsumen(${index})"><i class="fas fa-edit"></i> EDIT</button>
+                        <button class="btn-action btn-hapus" onclick="hapusKonsumen(${index})"><i class="fas fa-trash"></i> HAPUS</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function editKonsumen(index) {
+            window.location.href = `edit-konsumen.html?id=${index}`;
+        }
+
+        function hapusKonsumen(index) {
+            alert('Data konsumen terhapus.');
+        }
+
+        const btnHamburger = document.getElementById('btn-hamburger');
+        const sidebar = document.getElementById('sidebar');
+
+        btnHamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (window.innerWidth <= 900 && !sidebar.contains(e.target) && !btnHamburger.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in').forEach(el => el.classList.add('show'));
+            renderKonsumenTable();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk Admin - ADM Furniture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #2c3e50;
+            /* Warna biru gelap sesuai background figma */
+            --card-bg: #ffffff;
+            --input-bg: #cbdce6;
+            /* Warna biru muda sesuai input field figma */
+            --btn-masuk: #548ca8;
+            /* Warna tombol sesuai figma */
+            --text-gray: #555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* --- LOGIN CARD --- */
+        .login-card {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            padding: 50px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .login-card h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .login-card p {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- FORM STYLING --- */
+        .form-group {
+            text-align: left;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 15px 45px 15px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--input-bg);
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-container input::placeholder {
+            color: #7f8c8d;
+        }
+
+        .input-container i {
+            position: absolute;
+            right: 20px;
+            color: #555;
+            font-size: 18px;
+        }
+
+        /* --- BUTTON --- */
+        .btn-masuk {
+            width: 150px;
+            padding: 12px;
+            background-color: var(--btn-masuk);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            float: left;
+            /* Posisi kiri sesuai figma */
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-masuk:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            .login-card {
+                padding: 40px 25px;
+            }
+
+            .btn-masuk {
+                width: 100%;
+                /* Full width di mobile */
+                float: none;
+            }
+        }
+
+        /* --- ANIMATION --- */
+        .fade-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: 0.8s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card fade-in" id="loginCard">
+        <h1>MASUK</h1>
+        <p>ADMIN/ADMINISTRATOR FURNITURE</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>USERNAME</label>
+                <div class="input-container">
+                    <input type="text" id="username" placeholder="Username Anda" required>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>PASSWORD</label>
+                <div class="input-container">
+                    <input type="password" id="password" placeholder="Password Anda" required>
+                    <i class="fas fa-key"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-masuk">MASUK</button>
+        </form>
+    </div>
+
+    <script>
+        // 1. Fade-in Animation on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const card = document.getElementById('loginCard');
+            setTimeout(() => {
+                card.classList.add('show');
+            }, 100);
+        });
+
+        // 2. Form Submission Interaction
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const btn = document.querySelector('.btn-masuk');
+            btn.innerText = "MEMPROSES...";
+            btn.style.opacity = "0.7";
+
+            // Simulasi proses login
+            setTimeout(() => {
+                alert('Login Berhasil! Selamat datang Admin.');
+                window.location.href = 'Admin.html'; // Arahkan ke dashboard
+            }, 1500);
+        });
+
+        // 3. Hover Effect Script (Secondary Backup to CSS)
+        const button = document.querySelector('.btn-masuk');
+        button.addEventListener('mouseenter', () => {
+            button.style.letterSpacing = "1px";
+        });
+        button.addEventListener('mouseleave', () => {
+            button.style.letterSpacing = "normal";
+        });
+    </script>
+</body>
+
+</html>

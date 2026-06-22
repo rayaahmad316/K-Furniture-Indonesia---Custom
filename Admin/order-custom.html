@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Custom Furniture - ADM Furniture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --sidebar-header-bg: #cbdce6;
+            --sidebar-dark: #2c3e50;
+            --topbar-bg: #f8f9fa;
+            --accent-blue: #3498db;
+            --btn-edit: #548ca8;
+            --btn-hapus: #2c3e50;
+            --status-bg: #d1ecf1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #fff;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-dark);
+            height: 100vh;
+            position: fixed;
+            z-index: 1001;
+            transition: 0.3s;
+        }
+
+        .sidebar-logo {
+            background-color: var(--sidebar-header-bg);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #000;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .sidebar-logo span {
+            font-weight: 300;
+            margin-left: 5px;
+        }
+
+        .admin-profile {
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logout-section {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- TOPBAR --- */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            height: 60px;
+            background: var(--topbar-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .divider {
+            width: 1px;
+            height: 35px;
+            background: #ccc;
+            margin-right: 20px;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .icon-wrap {
+            position: relative;
+        }
+
+        .badge-notif {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-blue);
+            color: white;
+            font-size: 10px;
+            padding: 1px 4px;
+            border-radius: 2px;
+        }
+
+        /* --- CONTENT --- */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 30px;
+            width: 100%;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* TABLE STYLING */
+        .table-card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .table-title {
+            background: #e9ecef;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #fff;
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+            vertical-align: top;
+        }
+
+        .desc-text {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .status-badge {
+            background: var(--status-bg);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+
+        .btn-edit {
+            background: var(--btn-edit);
+        }
+
+        .btn-hapus {
+            background: var(--btn-hapus);
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        .order-img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* --- ANIMATION & RESPONSIVE --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.6s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .topbar {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <h2>ADM<span>Furniture</span></h2>
+        </div>
+        <div class="admin-profile">
+            <i class="fas fa-user-circle fa-2x"></i>
+            <span>Admin 1</span>
+        </div>
+        <div class="menu-label">MENU ADMIN</div>
+        <nav>
+            <a href="Admin.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="konsumen.html" class="nav-link"><i class="fas fa-users"></i> Konsumen</a>
+            <a href="katalog-produk.html" class="nav-link"><i class="fas fa-book"></i> Katalog Produk</a>
+            <a href="order-custom.html" class="nav-link active"><i class="fas fa-edit"></i> Order Custom</a>
+        </nav>
+        <div class="logout-section">
+            <a href="index.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+    </aside>
+
+    <nav class="topbar">
+        <div class="topbar-left">
+            <i class="fas fa-bars" id="btn-menu" style="cursor:pointer; font-size: 20px;"></i>
+        </div>
+        <div class="topbar-right">
+            <div class="divider"></div>
+            <div class="cart-box">
+                <div class="icon-wrap">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge-notif">0</span>
+                </div>
+                <span style="font-size: 14px;">Pesanan Masuk</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header fade-in">
+            <h1>ORDER CUSTOM FURNITURE</h1>
+            <p>Control Panel</p>
+        </header>
+        <section class="table-card fade-in">
+            <div class="table-title">Daftar Order Custom Furniture</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Konsumen</th>
+                            <th>Alamat</th>
+                            <th>Deskripsi</th>
+                            <th>Warna</th>
+                            <th>Jumlah</th>
+                            <th>Harga</th>
+                            <th>Gambar</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Hamburger Menu Logic
+        const btnMenu = document.getElementById('btn-menu');
+        const sidebar = document.getElementById('sidebar');
+
+        btnMenu.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Scroll Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        function getStatusClass(status) {
+            if (!status) return 'status-konfirmasi';
+            const lower = status.toLowerCase();
+            if (lower === 'proses') return 'status-proses';
+            if (lower === 'pengiriman' || lower === 'kirim') return 'status-kirim';
+            return 'status-konfirmasi';
+        }
+
+        function createOrderRow(order, index) {
+            return `
+                <tr>
+                    <td>${order.customer || 'N/A'}</td>
+                    <td>${order.address || 'N/A'}</td>
+                    <td class="desc-text">${(order.description || 'N/A').replace(/\n/g, '<br>')}</td>
+                    <td>${order.color || 'N/A'}</td>
+                    <td align="center">${order.quantity || 1} Pcs</td>
+                    <td>${order.price || 'Rp 0'}</td>
+                    <td align="center">
+                        <img src="${order.image || 'https://via.placeholder.com/80x100?text=No+Image'}" class="order-img" alt="Custom Furniture">
+                    </td>
+                    <td align="center">
+                        <span class="status-badge ${getStatusClass(order.status)}">${order.status || 'Konfirmasi'}</span>
+                    </td>
+                    <td>
+                        <a href="edit-custom.html?orderIndex=${index}" class="btn btn-edit"><i class="fas fa-edit"></i> EDIT</a>
+                        <button onclick="deleteOrder(${index})" class="btn btn-hapus"><i class="fas fa-trash"></i> HAPUS</button>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function loadOrderData() {
+            const tbody = document.getElementById('orderTableBody');
+            const savedOrders = JSON.parse(localStorage.getItem('customOrders') || '[]');
+            const badge = document.querySelector('.badge-notif');
+            badge.textContent = savedOrders.length;
+
+            if (savedOrders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align:center; padding:20px;">Belum ada pesanan custom. Silakan buat pesanan di Custom Furniture.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            savedOrders.forEach((order, index) => {
+                tbody.insertAdjacentHTML('beforeend', createOrderRow(order, index));
+            });
+        }
+
+        function deleteOrder(index) {
+            const savedOrders = JSON.parse(localStorage.getItem('customOrders') || '[]');
+            if (index < 0 || index >= savedOrders.length) return;
+            if (!confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) return;
+            savedOrders.splice(index, 1);
+            localStorage.setItem('customOrders', JSON.stringify(savedOrders));
+            loadOrderData();
+        }
+
+        window.addEventListener('DOMContentLoaded', loadOrderData);
+    </script>
+</body>
+
+</html>
