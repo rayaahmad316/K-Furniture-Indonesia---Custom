@@ -565,11 +565,13 @@
         function createOrderRow(order, index) {
             const statusClass = order.status.toLowerCase() === 'proses'
                 ? 'status-proses'
-                : order.status.toLowerCase() === 'kirim'
+                : order.status.toLowerCase() === 'pengiriman'
                     ? 'status-kirim'
-                    : 'status-konfirmasi';
+                    : order.status.toLowerCase() === 'kirim'
+                        ? 'status-kirim'
+                        : 'status-konfirmasi';
 
-            const isLocked = order.status.toLowerCase() === 'proses';
+            const isLocked = ['proses', 'pengiriman'].includes(order.status.toLowerCase());
             const editButton = isLocked
                 ? `<button class="btn-edit btn-disabled" type="button"><i class="material-icons" style="font-size:14px">edit</i> EDIT</button>`
                 : `<a href="Edit Pesanan.html?orderIndex=${index}" style="text-decoration: none;"><button class="btn-edit"><i class="material-icons" style="font-size:14px">edit</i> EDIT</button></a>`;
